@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bet Swipe</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #121212;
+      color: #fff;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 32px;
+      color: #f1f1f1;
+    }
+
+    #card-container {
+      position: relative;
+      width: 100%;
+      max-width: 280px;
+      height: 350px;
+      margin-bottom: 80px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      text-align: center;
+      padding: 20px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      touch-action: none;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .buttons button {
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .decline {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .accept {
+      background: #2ecc71;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+  <h1>Cards</h1>
+  <div id="card-container"></div>
+  <div class="buttons">
+    <button class="decline" onclick="swipeLeft()">Decline 👎</button>
+    <button class="accept" onclick="swipeRight()">Accept 👍</button>
+  </div>
+  <button onclick="resetCards()" style="margin-top: 30px; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background: #3498db; color: white; cursor: pointer;">🔄 Refresh</button>
+  <script>
+    const bets = [
+      "$20 says the Lakers beat the Warriors tonight",
+      "$50 if BTC hits $70k by Friday",
+      "$10 that it rains tomorrow in Austin",
+      "$100 I beat you in Fantasy Football playoffs",
+      "$5 that ChatGPT writes better code than you"
+    ];
+
+    const container = document.getElementById('card-container');
+    let currentIndex = 0;
+
+    function createCard(text) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerText = text;
+
+      let startX = 0;
+      let currentX = 0;
+      let isDragging = false;
+
+      card.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+      });
+
+      card.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX - startX;
+        card.style.transform = `translateX(${currentX}px)`;
+      });
+
+      card.addEventListener('touchend', () => {
+        isDragging = false;
+        if (currentX > 100) {
+          swipeRight();
+        } else if (currentX < -100) {
+          swipeLeft();
+        } else {
+          card.style.transform = 'translateX(0)';
+        }
+        currentX = 0;
+      });
+
+      return card;
+    }
+
+    function renderCard() {
+      container.innerHTML = '';
+      if (currentIndex >= bets.length) {
+        container.innerHTML = '<div class="card">No more bets. 🃏</div>';
+        return;
+      }
+      const card = createCard(bets[currentIndex]);
+      container.appendChild(card);
+    }
+
+    function swipeLeft() {
+      animateSwipe(-1);
+    }
+
+    function swipeRight() {
+      animateSwipe(1);
+    }
+
+    function animateSwipe(direction) {
+      const card = container.querySelector('.card');
+      if (!card) return;
+
+      card.style.transform = `translateX(${direction * 400}px) rotate(${direction * 20}deg)`;
+      card.style.opacity = '0';
+
+      setTimeout(() => {
+        currentIndex++;
+        renderCard();
+      }, 300);
+    }
+
+    // Initial render
+    renderCard();
+
+    function resetCards() {
+      currentIndex = 0;
+      renderCard();
+    }
+  </script>
+  </div>
+</body>
+</html>
