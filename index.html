@@ -81,12 +81,13 @@
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
   <h1>Swypz</h1>
   <div id="card-container"></div>
-  <div class="buttons">
+  <div class="buttons" style="margin: 4px 0;">
     <button class="decline" onclick="swipeLeft()">Decline 👎</button>
     <button class="accept" onclick="swipeRight()">Accept 👍</button>
   </div>
-  <button onclick="resetCards()" style="margin-top: 30px; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background: #3498db; color: white; cursor: pointer;">🔄 Refresh</button>
   
+  
+    
 
 <form onsubmit="addNewBet(event)" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
   <input type="text" id="new-bet" placeholder="Enter a new bet..." style="padding: 10px; width: 250px; border-radius: 5px; border: none;" required />
@@ -145,7 +146,12 @@
     function renderCard() {
       container.innerHTML = '';
       if (currentIndex >= bets.length) {
-        container.innerHTML = '<div class="card">No more bets. 🃏</div>';
+        container.innerHTML = `
+          <div class="card">
+            <div style="margin-top: 2px;">
+              <button onclick="resetCards()" style="padding: 8px 16px; font-size: 14px; border: none; border-radius: 5px; background: #3498db; color: white; cursor: pointer;">🔄 Refresh</button>
+            </div>
+          </div>`;
         return;
       }
       const card = createCard(bets[currentIndex]);
