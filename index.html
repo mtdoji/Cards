@@ -160,6 +160,8 @@
       const card = container.querySelector('.card');
       if (!card) return;
 
+      if (navigator.vibrate) navigator.vibrate(50); // Haptic feedback
+
       card.style.transform = `translateX(${direction * 400}px) rotate(${direction * 20}deg)`;
       card.style.opacity = '0';
 
@@ -188,6 +190,7 @@
 
     
     function resetCards() {
+      if (navigator.vibrate) navigator.vibrate(100); // Haptic feedback on reset
       currentIndex = 0;
       renderCard();
     }
