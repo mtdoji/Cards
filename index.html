@@ -77,19 +77,25 @@
 </head>
 <body>
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-  <h1>Cards</h1>
+  <h1>Bet Cards</h1>
   <div id="card-container"></div>
   <div class="buttons">
     <button class="decline" onclick="swipeLeft()">Decline 👎</button>
     <button class="accept" onclick="swipeRight()">Accept 👍</button>
   </div>
   <button onclick="resetCards()" style="margin-top: 30px; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background: #3498db; color: white; cursor: pointer;">🔄 Refresh</button>
-  <script>
+  
+
+<form onsubmit="addNewBet(event)" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+  <input type="text" id="new-bet" placeholder="Enter a new bet..." style="padding: 10px; width: 250px; border-radius: 5px; border: none;" required />
+  <button type="submit" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background: #27ae60; color: white; cursor: pointer;">➕ Add Bet</button>
+</form>
+
+<script>
     const bets = [
       "$20 says the Lakers beat the Warriors tonight",
       "$50 if BTC hits $70k by Friday",
       "$10 that it rains tomorrow in Austin",
-      "$20 Scottie wins The Masters",
       "$100 I beat you in Fantasy Football playoffs",
       "$5 that ChatGPT writes better code than you"
     ];
@@ -166,6 +172,21 @@
     // Initial render
     renderCard();
 
+    function addNewBet(e) {
+      e.preventDefault();
+      const input = document.getElementById('new-bet');
+      const newBet = input.value.trim();
+      if (newBet) {
+        bets.push(newBet);
+        if (currentIndex >= bets.length - 1) {
+          renderCard();
+        }
+        alert('New bet added!');
+        input.value = '';
+      }
+    }
+
+    
     function resetCards() {
       currentIndex = 0;
       renderCard();
