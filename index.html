@@ -218,7 +218,7 @@
 <div id="profile-popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1e1e1e; color: white; border-radius: 12px; padding: 20px; width: 280px; max-height: 60vh; overflow-y: auto; box-shadow: 0 0 10px rgba(0,0,0,0.6); z-index: 1000; text-align: center;"">
   <h3>Accepted Bets</h3>
   <ul id="accepted-bets" style="list-style: none; padding-left: 0;"></ul>
-  <button style="margin-top: 12px; width: 100%; padding: 10px; background: #2ecc71; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">BET</button>
+  <button onclick="resetBadge()" style="margin-top: 12px; width: 100%; padding: 10px; background: #2ecc71; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">BET</button>
 </div>
 <script>
   const acceptedBets = [];
@@ -228,7 +228,6 @@
   const acceptedList = document.getElementById('accepted-bets');
 
   profileButton.onclick = () => {
-    badge.style.display = 'none';
     popup.style.display = 'block';
     acceptedList.innerHTML = '';
     acceptedBets.forEach(bet => {
@@ -253,6 +252,12 @@ document.addEventListener('click', function (event) {
       popup.style.display = 'none';
     }
   });
+function resetBadge() {
+    badge.textContent = '0';
+    badge.style.display = 'none';
+    acceptedBets.length = 0;
+    acceptedList.innerHTML = '';
+  }
 </script>
 </body>
 </html>
