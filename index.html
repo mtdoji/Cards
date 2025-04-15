@@ -85,16 +85,16 @@
     <button class="decline" onclick="swipeLeft()">Decline 👎</button>
     <button class="accept" onclick="swipeRight()">Accept 👍</button>
   </div>
-  
-  
-    
 
 <form onsubmit="addNewBet(event)" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
   <input type="text" id="new-bet" placeholder="Enter a new bet..." style="padding: 10px; width: 250px; border-radius: 5px; border: none;" required />
   <button type="submit" style="padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background: #27ae60; color: white; cursor: pointer;">➕ Add Bet</button>
 </form>
 
-  <button onclick="alert('Profile coming soon!')" style="margin-top: 10px; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background: purple; color: white; cursor: pointer;">👤 Profile</button>
+  <button id="profile-button" onclick="alert('Profile coming soon!')" style="position: relative; margin-top: 10px; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background: purple; color: white; cursor: pointer;">
+    👤 Profile
+    <span id="badge-count" style="position: absolute; top: -6px; right: -6px; background: red; color: white; border-radius: 50%; padding: 4px 8px; font-size: 12px; display: none;">0</span>
+  </button>
 
 <script>
     const bets = [
@@ -163,10 +163,11 @@
     }
 
     function swipeRight() {
-      animateSwipe(1);
+      const isLastCard = currentIndex >= bets.length - 1;
+      animateSwipe(1, !isLastCard);
     }
 
-    function animateSwipe(direction) {
+    function animateSwipe(direction, countBadge = false) {
       const card = container.querySelector('.card');
       if (!card) return;
 
@@ -176,6 +177,7 @@
       card.style.opacity = '0';
 
       setTimeout(() => {
+        if (countBadge) incrementBadge();
         currentIndex++;
         renderCard();
       }, 300);
@@ -198,13 +200,20 @@
       }
     }
 
-    
+    function incrementBadge() {
+      const badge = document.getElementById('badge-count');
+      let count = parseInt(badge.textContent) || 0;
+      count++;
+      badge.textContent = count;
+      badge.style.display = 'inline-block';
+    }
+
     function resetCards() {
       if (navigator.vibrate) navigator.vibrate(100); // Haptic feedback on reset
       currentIndex = 0;
       renderCard();
     }
-  </script>
+</script>
   </div>
 </body>
 </html>
